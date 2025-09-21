@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mô phỏng Nạp Xu TikTok</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            color: #161823;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            width: 800px;
+            padding: 30px;
+            box-sizing: border-box;
+            margin-top: 70px;
+        }
+
+        /* TikTok Header */
+        .tiktok-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-bottom: 1px solid #e3e4e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .tiktok-logo {
+            width: 100px;
+            margin-right: 20px;
+        }
+
+        .search-bar {
+            width: 300px;
+            padding: 8px 15px;
+            border: none;
+            background-color: #f1f1f2;
+            border-radius: 20px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .upload-btn {
+            background-color: #fe2c55;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .upload-btn i {
+            font-size: 0.9rem;
+        }
+
+        .inbox-icon, .messages-icon {
+            position: relative;
+            font-size: 1.5rem;
+            color: #161823;
+            cursor: pointer;
+        }
+
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: #fe2c55;
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 50%;
+            min-width: 12px;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Recharge Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .transaction-history {
+            color: #fe2c55;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 25px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-input {
+            width: 200px;
+        }
+
+        .user-input input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .coins {
+            display: flex;
+            align-items: center;
+            color: #8c8c8c;
+            font-size: 0.9rem;
+        }
+
+        .coin-icon {
+            color: #ffc700;
+            margin-right: 5px;
+            font-size: 0.9rem;
+        }
+
+        .policy, .promotion {
+            text-align: right;
+        }
+
+        .policy-title {
+            color: #8c8c8c;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .policy-content {
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .policy-content span {
+            color: #8c8c8c;
+            margin-left: 3px;
+            font-size: 0.8rem;
+        }
+
+        .promotion-link {
+            color: #161823;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .promotion-link i {
+            font-size: 0.8rem;
+        }
+
+        .promo-code {
+            color: #8c8c8c;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 5px;
+        }
+
+        .promo-code i {
+            font-size: 0.8rem;
+        }
+
+        .saving-info {
+            background-color: #fff7e6;
+            border: 1px solid #ffe7ba;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            color: #8c8c8c;
+        }
+
+        .saving-info p {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .saving-info i {
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .coin-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option-card {
+            border: 1px solid #e3e4e6;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-card:hover {
+            border-color: #fe2c55;
+            box-shadow: 0 0 10px rgba(254, 44, 85, 0.1);
+        }
+
+        .option-card.selected {
+            border-color: #fe2c55;
+            background-color: #fff0f3;
+            box-shadow: 0 0 10px rgba(254, 44, 85, 0.1);
+        }
+
+        .option-card .coin-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #ffc700;
+        }
+
+        .option-card .coins-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #161823;
+        }
+
+        .option-card .price {
+            font-size: 0.9rem;
+            color: #8c8c8c;
+        }
+
+        .option-card.custom .custom-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #fe2c55;
+        }
+
+        .option-card.custom .coins-amount {
+            color: #fe2c55;
+        }
+
+        .payment-summary {
+            border-top: 1px solid #f0f0f0;
+            padding-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .payment-methods {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .payment-methods span {
+            color: #8c8c8c;
+        }
+
+        .payment-icons img {
+            height: 25px;
+            object-fit: contain;
+        }
+
+        .total-amount {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .total-amount span:first-child {
+            color: #8c8c8c;
+        }
+
+        .total-price {
+            color: #fe2c55;
+            font-size: 1.2rem;
+        }
+
+        .recharge-button {
+            background-color: #fe2c55;
+            color: #fff;
+            border: none;
+            padding: 15px 0;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            width: 100%;
+        }
+
+        .recharge-button:hover {
+            background-color: #e6284f;
+        }
+
+        .secure-payment-badge {
+            height: 25px;
+            align-self: flex-end;
+            margin-top: -10px;
+        }
+
+        /* Popup */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 300px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .popup-content h2 {
+            font-size: 1.5rem;
+            color: #fe2c55;
+            margin: 0 0 10px;
+            font-weight: 600;
+        }
+
+        .popup-content p {
+            font-size: 1rem;
+            color: #161823;
+            margin: 0;
+        }
+
+        .loading {
+            font-size: 2rem;
+            color: #fe2c55;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .popup-content.processing .loading {
+            display: block;
+        }
+
+        .checkmark {
+            display: none;
+            font-size: 2rem;
+            color: #28a745;
+            margin: 0 auto 10px;
+        }
+
+        .popup-content.success .checkmark {
+            display: block;
+        }
+
+        .countdown {
+            font-size: 1.2rem;
+            color: #fe2c55;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .popup-content.processing .countdown {
+            display: block;
+        }
+
+        /* Custom Alert */
+        .custom-alert {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .custom-alert-content {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            max-width: 350px;
+            animation: alertPop 0.3s ease-out;
+        }
+
+        @keyframes alertPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .custom-alert-content h3 {
+            font-size: 1.2rem;
+            color: #fe2c55;
+            margin: 0 0 15px;
+            font-weight: 600;
+        }
+
+        .custom-alert-content p {
+            font-size: 1rem;
+            color: #161823;
+            margin: 0 0 20px;
+        }
+
+        .custom-alert-button {
+            background-color: #fe2c55;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .custom-alert-button:hover {
+            background-color: #e6284f;
+        }
+
+        /* Bottom Promotion */
+        .promo-bottom {
+            display: flex;
+            align-items: center;
+            background-color: #f8f8f8;
+            border: 1px solid #e3e4e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            gap: 15px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .promo-bottom:hover {
+            background-color: #f0f0f0;
+        }
+
+        .promo-icon {
+            font-size: 2.2rem;
+            color: #fe2c55;
+        }
+
+        .promo-text h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .promo-text p {
+            margin: 5px 0 0;
+            font-size: 0.9rem;
+            color: #8c8c8c;
+        }
+
+        .promo-arrow {
+            margin-left: auto;
+            color: #8c8c8c;
+            font-size: 1rem;
+        }
+
+        /* Help Icon */
+        .help-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #e3e4e6;
+            color: #161823;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s ease;
+        }
+
+        .help-icon:hover {
+            background-color: #d2d3d5;
+        }
+    </style>
+</head>
+<body>
+    <div class="tiktok-header">
+        <div class="header-left">
+            <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok Logo" class="tiktok-logo">
+            <input type="text" placeholder="Search..." class="search-bar">
+        </div>
+        <div class="header-right">
+            <button class="upload-btn">
+                <i class="fas fa-upload"></i> Tải lên
+            </button>
+            
+            
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section-header">
+            <h2>Nhận Xu</h2>
+            <a href="#" class="transaction-history">Xem lịch sử giao dịch</a>
+        </div>
+
+        <div class="user-info">
+            <div class="user-profile">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR81iX4Mo49Z3oCPSx-GtgiMAkdDop2uVmVvw&s" alt="Profile Avatar" class="profile-avatar">
+                <div class="user-input">
+                    <input type="text" id="userId" placeholder="Nhập User ID" required>
+                </div>
+            </div>
+            <div class="policy">
+                <span class="policy-title">Quy đổi thành Xu</span>
+                <p class="policy-content">Phần thưởng nội dung: <span>$893762</span></p>
+            </div>
+            <div class="promotion">
+                <a href="#" class="promotion-link">
+                    Mời & nhận phần thưởng
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <p class="promo-code">5ZPAC45P <i class="fas fa-copy"></i></p>
+            </div>
+        </div>
+
+        <div class="saving-info">
+            <p>Nạp: Tiết kiệm khoảng 25% với phí dịch vụ của bên thứ ba hợp hơn. <i class="fas fa-info-circle"></i></p>
+        </div>
+
+        <div class="coin-options">
+            <label class="option-card">
+                <input type="radio" name="package" value="30" checked>
+                <i class="fas fa-coins coin-icon"></i>
+                <span class="coins-amount">30</span>
+                <span class="price">₫9,800</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="package" value="200">
+                <i class="fas fa-coins coin-icon"></i>
+                <span class="coins-amount">200</span>
+                <span class="price">₫65,100</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="package" value="300">
+                <i class="fas fa-coins coin-icon"></i>
+                <span class="coins-amount">300</span>
+                <span class="price">₫97,600</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="package" value="450">
+                <i class="fas fa-coins coin-icon"></i>
+                <span class="coins-amount">450</span>
+                <span class="price">₫146,400</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="package" value="750">
+                <i class="fas fa-coins coin-icon"></i>
+                <span class="coins-amount">750</span>
+                <span class="price">₫243,900</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="package" value="1000">
+                <i class="fas fa-coins coin-icon"></i>
+                <span class="coins-amount">1,000</span>
+                <span class="price">₫325,200</span>
+            </label>
+            <label class="option-card">
+                <input type="radio" name="package" value="9000">
+                <i class="fas fa-coins coin-icon"></i>
+                <span class="coins-amount">9,000</span>
+                <span class="price">₫2,926,500</span>
+            </label>
+            <label class="option-card custom">
+                <input type="radio" name="package" value="custom">
+                <i class="fas fa-cog custom-icon"></i>
+                <span class="coins-amount">Tùy chỉnh</span>
+                <span class="price">Hỗ trợ số lượng lớn</span>
+            </label>
+        </div>
+
+        <div class="payment-summary">
+            <div class="payment-methods">
+                <span>Phương thức thanh toán</span>
+                <div class="payment-icons">
+                    <img src="https://lf16-co.g-p-static.com/obj/pipo-sgcompliance/sky/visa_acffbd.png" alt="Visa">
+                    <img src="https://lf16-co.g-p-static.com/obj/pipo-sgcompliance/sky/mastercard_light_5865fd.png" alt="Mastercard">
+                    <img src="https://lf16-co.g-p-static.com/obj/pipo-sgcompliance/sky/diners_0faca9.png" alt="Diners">
+                    <img src="https://lf16-co.g-p-static.com/obj/pipo-sgcompliance/sky/discover_4adc90.png" alt="Discover">
+                    <img src="https://lf16-co.g-p-static.com/obj/pipo-sgcompliance/sky/card_american_express_51cd3f.png" alt="Amex">
+                    <img src="https://lf16-co.g-p-static.com/obj/pipo-sgcompliance/sky/momo_4256e5.png" alt="MoMo">
+                    <img src="https://lf16-co.g-p-static.com/obj/pipo-sgcompliance/sky/zalopay_8e254f.png" alt="ZaloPay">
+                    <img src="https://lf16-co.g-p-static.com/obj/pipo-sgcompliance/sky/BankTransfer_facae0.png" alt="Bank Transfer">
+                    <img src="https://lf16-co.g-p-static.com/obj/pipo-sgcompliance/sky/light_vnpay_b946ce.png" alt="VNPay QR">
+                </div>
+            </div>
+            <div class="total-amount">
+                <span>Tổng</span>
+                <span class="total-price">₫325,200</span>
+            </div>
+            <button class="recharge-button" onclick="recharge()">Nạp</button>
+            
+        </div>
+
+        <div class="promo-bottom">
+            <i class="fas fa-gift promo-icon"></i>
+            <div class="promo-text">
+                <h3>Mời & nhận phần thưởng</h3>
+                <p>Khám phá tính năng mới này ngay!</p>
+            </div>
+            <i class="fas fa-arrow-right promo-arrow"></i>
+        </div>
+    </div>
+
+    <div class="help-icon">
+        <i class="fas fa-question-circle"></i>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <i class="fas fa-spinner loading"></i>
+            <i class="fas fa-check-circle checkmark"></i>
+            <h2>Đang xử lý...</h2>
+            <p id="popup-message"></p>
+            <div class="countdown" id="countdown">5</div>
+        </div>
+    </div>
+
+    <div class="custom-alert" id="customAlert">
+        <div class="custom-alert-content">
+            <h3>Thông báo</h3>
+            <p>Vui lòng nhập User ID!</p>
+            <button class="custom-alert-button" onclick="closeAlert()">Đóng</button>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        // Cập nhật tổng tiền khi chọn gói
+        document.querySelectorAll('input[name="package"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const price = {
+                    '30': '₫9,800', '200': '₫65,100', '300': '₫97,600',
+                    '450': '₫146,400', '750': '₫243,900', '1000': '₫325,200',
+                    '9000': '₫2,926,500', 'custom': '₫0'
+                };
+                document.querySelector('.total-price').textContent = price[this.value] || '₫0';
+                document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+                this.closest('.option-card').classList.add('selected');
+            });
+        });
+
+        // Xử lý nút Nạp
+        function recharge() {
+            const userId = document.getElementById('userId').value;
+            const selectedPackage = document.querySelector('input[name="package"]:checked').value;
+            const popup = document.getElementById('popup');
+            const popupContent = popup.querySelector('.popup-content');
+            const popupMessage = document.getElementById('popup-message');
+            const countdown = document.getElementById('countdown');
+            const btn = document.querySelector('.recharge-button');
+
+            if (!userId) {
+                showAlert();
+                return;
+            }
+
+            // Hiển thị popup xử lý
+            popup.style.display = 'flex';
+            btn.disabled = true;
+            popupContent.classList.remove('success');
+            popupContent.classList.add('processing');
+            let timeLeft = 5;
+
+            // Cập nhật đồng hồ đếm ngược
+            countdown.textContent = timeLeft;
+            const timer = setInterval(() => {
+                timeLeft--;
+                countdown.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    popupContent.classList.remove('processing');
+                    popupContent.classList.add('success');
+                    popupMessage.textContent = `Nạp thành công! Bạn đã nạp ${selectedPackage} xu cho User ID: ${userId}.`;
+                    popupContent.querySelector('.loading').style.display = 'none';
+
+                    // Tự động ẩn popup sau 2 giây
+                    setTimeout(() => {
+                        popup.style.display = 'none';
+                        popupContent.classList.remove('success');
+                        popupContent.querySelector('.loading').style.display = 'block';
+                        popupMessage.textContent = '';
+                        countdown.textContent = '5';
+                        btn.disabled = false;
+                    }, 2000);
+                }
+            }, 1000);
+        }
+
+        // Hiển thị custom alert
+        function showAlert() {
+            const alert = document.getElementById('customAlert');
+            alert.style.display = 'flex';
+        }
+
+        // Đóng custom alert
+        function closeAlert() {
+            const alert = document.getElementById('customAlert');
+            alert.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
